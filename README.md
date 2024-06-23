@@ -88,6 +88,11 @@ These instructions will help you set up and run the project on your local machin
 4. **To-Do List:**
    - View, create, complete, and delete tasks.
 
+## Demo Video
+
+https://github.com/shravani2201/Simple_To_do_list_Django/assets/119721385/a838260e-adba-4acb-8509-c53d63cf0c2b
+
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
