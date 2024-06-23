@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* Reset and base styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            margin: 0;
+            color: #666;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-list {
+            width: 100%;
+        }
+
+        .task-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .task-item .task-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-item strong {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .task-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            color: #ae2936;
+        }
+
+        .add-task-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .add-task-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .add-task-form input[type="text"],
+        .add-task-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .logout-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body data-user-is-staff="{{ user.is_staff|yesno:'true,false' }}">
+    <header>
+        <p>Logged in as: {{ user.username }}</p>
+        <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+    </header>
+    <h2>To-Do List</h2>
+    <ul class="task-list">
+    {% for task in tasks %}
+        <li class="task-item">
+            <div class="task-info">
+                <input type="checkbox" id="task_{{ task.pk }}" {% if task.completed %} checked {% endif %} data-task-id="{{ task.pk }}">
+                <label for="task_{{ task.pk }}">
+                    <strong>{{ task.title }}</strong> - {{ task.description }}
+                </label>
+            </div>
+            <form method="POST" action="{% url 'delete_task' task.pk %}" class="delete-task-form">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+    <form method="POST" action="{% url 'add_task' %}" class="add-task-form">
+        {% csrf_token %}
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required><br>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" required></textarea><br>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var deleteButtons = document.querySelectorAll(".delete-btn");
+            var userIsStaff = document.body.getAttribute("data-user-is-staff") === "true";
+            
+            deleteButtons.forEach(function(button) {
+                button.addEventListener("click", function(event) {
+                    if (!userIsStaff) {
+                        event.preventDefault();
+                        alert("Guests are not allowed to delete tasks.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
