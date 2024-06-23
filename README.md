@@ -37,28 +37,30 @@ These instructions will help you set up and run the project on your local machin
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
-3. **Install the required packages:**
+3. **Install the required packages.**
+
+4. **Install and set-up the OPA executable file from the github releases from the official website.**
 
 
-4. **Apply migrations:**
+5. **Apply migrations:**
 
     ```bash
     python manage.py migrate
     ```
 
-5. **Create a superuser:**
+6. **Create a superuser:**
 
     ```bash
     python manage.py createsuperuser
     ```
 
-6. **Run the development server:**
+7. **Run the development server:**
 
     ```bash
     python manage.py runserver
     ```
 
-7. **Open your browser and navigate to:**
+8. **Open your browser and navigate to:**
 
     ```
     http://127.0.0.1:8000/
